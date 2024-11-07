@@ -1,12 +1,15 @@
 import { ProfileFormModal } from '../Modals/ProfileFormModal';
 import { useNavBar } from './hooks/NavbarHook';
 import './styles.css';
+import { ConnectUserModal } from '../Modals/ConnectUserModal';
 
 export const Navbar = () => {
   const {
     openAddModal,
     setOpenAddModal,
-    setSearchedName
+    setSearchedName,
+    openConnectModal,
+    setOpenConnectModal
   } = useNavBar();
 
   return (
@@ -20,11 +23,15 @@ export const Navbar = () => {
       </div>
       <div className="action-buttons">
         <button className="action-btn" onClick={() => setOpenAddModal(true)}>Adicionar Usuário</button>
-        <button className="action-btn" onClick={() => {}}>Conectar Usuários</button>
+        <button className="action-btn" onClick={() => setOpenConnectModal(true)}>Conectar Usuários</button>
       </div>
       <ProfileFormModal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
+      />
+      <ConnectUserModal
+        open={openConnectModal}
+        onClose={() => setOpenConnectModal(false)}
       />
     </header>
   )

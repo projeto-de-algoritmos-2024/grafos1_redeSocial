@@ -3,11 +3,14 @@ import { useConnection } from "../../../context";
 
 export const useNavBar = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
-  const { setSearchedName } = useConnection()
+  const { setSearchedName } = useConnection();
+  const [openConnectModal, setOpenConnectModal] = useState(false);
   
   return {
     openAddModal,
     setOpenAddModal,
-    setSearchedName
+    setSearchedName,
+    openConnectModal,
+    setOpenConnectModal
   }
 }

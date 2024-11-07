@@ -7,7 +7,7 @@ interface ConnectionContextProps {
   graphState: Graph;
   addUser: (userData: AddUserType) => void;
   deleteUser: (userId: number) => void;
-  connectUsers: (userId1: number, userId2: number) => void;
+  connectUsers: (user1: string, user2: string) => void;
   findConnectedUsers: (startUserId: number) => (UserType | undefined)[];
   setSearchedName: React.Dispatch<React.SetStateAction<string>>;
   filteredUsers: UserType[]

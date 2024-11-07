@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react"
 import { graph } from "../mocks/connections"
-import { users, AddUserType } from "../mocks/users";
+import { users, AddUserType, UserType } from "../mocks/users";
 import { ConnectionContext } from "../context";
 
 
@@ -55,15 +55,18 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     removeUserFromGraph(userId)
   }
 
-  const connectUsers = (userId1: number, userId2: number) => {
+  const connectUsers = (user1:string, user2: string) => {
     setGraphState(prevGraph => {
       const newGraph = { ...prevGraph };
 
-      if (!newGraph[userId1].includes(userId2)) {
-        newGraph[userId1] = [...newGraph[userId1], userId2];
+      const index1 = parseInt(user1);
+      const index2 = parseInt(user2);
+      
+      if (!newGraph[index1].includes(index2)) {
+        newGraph[index1] = [...newGraph[index1], index2];
       }
-      if (!newGraph[userId2].includes(userId1)) {
-        newGraph[userId2] = [...newGraph[userId2], userId1];
+      if (!newGraph[index2].includes(index1)) {
+        newGraph[index2] = [...newGraph[index2], index1];
       }
 
       return newGraph;
