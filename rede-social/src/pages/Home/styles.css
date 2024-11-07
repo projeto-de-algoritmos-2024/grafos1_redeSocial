@@ -1,0 +1,19 @@
+body {
+  font-family: 'Montserrat';
+  background-color: #f4f4f9;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+
+/* Grid de Usuários */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}

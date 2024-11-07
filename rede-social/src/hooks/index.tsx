@@ -1,8 +1,10 @@
-import {  useState } from "react"
+import { ReactNode, useState } from "react"
 import { graph } from "../mocks/connections"
 import { users, UserType } from "../mocks/users";
+import { ConnectionContext } from "../context";
 
-export const useAppHook = () => {
+
+export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const [usersList, setUsersList] = useState(users);
   const [graphState, setGraphState] = useState(graph);
 
@@ -52,10 +54,17 @@ export const useAppHook = () => {
     return Array.from(visited).map(id => usersList.find(user => user.id === id));
   };
 
-  return {
-    addUser,
-    connectUsers,
-    findConnectedUsers,
-    usersList
-  }
+  return (
+    <ConnectionContext.Provider 
+      value={{
+        addUser,
+        connectUsers,
+        findConnectedUsers,
+        usersList,
+        graphState
+      }}
+    >
+      {children}
+    </ConnectionContext.Provider>
+  )
 }
