@@ -1,9 +1,19 @@
 import { UserType } from '../../mocks/users'
+import DeleteIcon from '@mui/icons-material/Delete';
 import './styles.css'
+import { useConnection } from '../../context';
 
 export const UserCard = ({ user }: { user: UserType }) => {
+  const { deleteUser, graphState } = useConnection()
+
+  console.log(graphState)
   return (
     <div className="user-card" key={user.id}>
+      <div className="trash-icon">
+        <button onClick={() => deleteUser(user.id)}>
+          <DeleteIcon />
+        </button>
+      </div>
       {user.photo ? (
         <img src={user.photo} alt={user.name} className="user-photo" />
       ) : (

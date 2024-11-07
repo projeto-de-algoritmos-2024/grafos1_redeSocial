@@ -1,21 +1,59 @@
-import { ReactNode, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { graph } from "../mocks/connections"
-import { users, UserType } from "../mocks/users";
+import { users, AddUserType } from "../mocks/users";
 import { ConnectionContext } from "../context";
 
 
 export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const [usersList, setUsersList] = useState(users);
   const [graphState, setGraphState] = useState(graph);
+  const [filteredUsers, setFilteredUsers] = useState(users);
+  const [searchedName, setSearchedName] = useState('');
 
-  const addUser = (userData: UserType) => {
-    setUsersList(prevUsers => [...prevUsers, userData]);
+  useEffect(() => {
+    const newUsers = usersList.filter(user => user.name.includes(searchedName));
+    setFilteredUsers(newUsers)
+    console.log(graphState)
+  }, [searchedName])
+
+  const addUser = (userData: AddUserType) => {
+    setUsersList(prevUsers => [...prevUsers, {
+      ...userData,
+      id: usersList.length + 1,
+      photo: userData.photo ? URL.createObjectURL(userData.photo) : './no-photo.jpeg'
+    }]);
+
+    setFilteredUsers(prevUsers => [...prevUsers, {
+      ...userData,
+      id: usersList.length + 1,
+      photo: userData.photo ? URL.createObjectURL(userData.photo) : './no-photo.jpeg'
+    }]);
     
     setGraphState(prevGraph => ({
       ...prevGraph,
-      [userData.id]: [],
+      [usersList.length + 1]: [],
     }));
   };
+
+  function removeUserFromGraph(userId: number): void {
+
+    setGraphState(prev => {
+      delete prev[userId]
+
+      for (const [id, connections] of Object.entries(prev)) {
+        prev[Number(id)] = connections.filter(connection => connection !== userId);
+      }
+
+      return prev
+    }) 
+  }
+
+  const deleteUser = (userId: number) => {
+    setUsersList(prev => [...prev.filter(item => item.id !== userId)])
+    setFilteredUsers(prev => [...prev.filter(item => item.id !== userId)])
+
+    removeUserFromGraph(userId)
+  }
 
   const connectUsers = (userId1: number, userId2: number) => {
     setGraphState(prevGraph => {
@@ -54,14 +92,19 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     return Array.from(visited).map(id => usersList.find(user => user.id === id));
   };
 
+  
+
   return (
     <ConnectionContext.Provider 
       value={{
         addUser,
+        deleteUser,
         connectUsers,
         findConnectedUsers,
         usersList,
-        graphState
+        filteredUsers,
+        graphState,
+        setSearchedName
       }}
     >
       {children}

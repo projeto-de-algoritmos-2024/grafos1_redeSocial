@@ -6,7 +6,7 @@ import './styles.css'
 
 export const Home = () => {
   const {
-    usersList
+    filteredUsers
    } = useConnection()
  
    return (
@@ -14,8 +14,8 @@ export const Home = () => {
       <Navbar />
 
       <div className="users-grid">
-        {usersList.map(user => (
-          <UserCard user={user} />
+        {filteredUsers.map(user => (
+          <UserCard user={user} key={user.id}/>
         ))}
       </div>
     </div>
