@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, Select, MenuItem, Button } from '@mui/material';
+import { Modal, Box, Typography, Select, MenuItem, Button, Avatar } from '@mui/material';
 import { useConnection } from '../../../context';
 import './styles.css';
-
+import { UserType } from '../../../mocks/users';
 
 interface ConnectUserModalProps {
   open: boolean;
@@ -10,9 +10,9 @@ interface ConnectUserModalProps {
 }
 
 export const ConnectUserModal: React.FC<ConnectUserModalProps> = ({ open, onClose }) => {
-    const { usersList, connectUsers } = useConnection();
-    const [firstUser, setFirstUser] = useState('');
-    const [secondUser, setSecondUser] = useState('');
+  const { usersList, connectUsers, setOpenToast, setToastMessage } = useConnection();
+  const [firstUser, setFirstUser] = useState<UserType | null>(null);
+  const [secondUser, setSecondUser] = useState<UserType | null>(null);
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby="profile-form-modal">
@@ -37,15 +37,23 @@ export const ConnectUserModal: React.FC<ConnectUserModalProps> = ({ open, onClos
                 className='select'
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={firstUser}
-                label="Age"
+                value={firstUser?.name}
+                label="Usuário 1"
                 onChange={(event) => {
-                    console.log(event.target.value)
-                    setFirstUser(event.target.value)
+                    const selected = usersList.filter(user => user.name === event.target.value)[0]
+                    setFirstUser(selected)
                 }}
             >
                 {usersList.map((user) => (
-                    <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+                    <MenuItem key={user.id} value={user.name}>
+                      <div className='menu-item'>
+                        <Avatar
+                          src={user.photo ?? undefined}
+                          sx={{ width: 32, height: 32, mr: 2 }}
+                        />
+                        {user.name}
+                      </div>
+                    </MenuItem>
                 ))}
                 
             </Select>
@@ -56,15 +64,23 @@ export const ConnectUserModal: React.FC<ConnectUserModalProps> = ({ open, onClos
                 className='select'
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={secondUser}
-                label="Age"
+                value={secondUser?.name}
+                label="Usuário 2"
                 onChange={(event) => {
-                    console.log(event.target.value)
-                    setSecondUser(event.target.value)
+                    const selected = usersList.filter(user => user.name === event.target.value)[0]
+                    setSecondUser(selected)
                 }}
             >
                 {usersList.map((user) => (
-                    <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+                    <MenuItem key={user.id} value={user.name}>
+                      <div className='menu-item'>
+                        <Avatar
+                          src={user.photo ?? undefined}
+                          sx={{ width: 32, height: 32, mr: 2 }}
+                        />
+                        {user.name}
+                      </div>
+                    </MenuItem>
                 ))}
 
             </Select>
@@ -72,8 +88,12 @@ export const ConnectUserModal: React.FC<ConnectUserModalProps> = ({ open, onClos
             <Button onClick={() => {
                     if (firstUser && secondUser)
                     {
-                        connectUsers(firstUser, secondUser);
-                        onClose(); 
+                        connectUsers(firstUser.id, secondUser.id);
+                        setToastMessage(`Usuário ${firstUser.name} conectado ao ${secondUser.name} com sucesso!`);
+                        onClose();
+                        setFirstUser(null)
+                        setSecondUser(null);
+                        setOpenToast(true);
                     }
                           
             }}   className='connect-button' type="submit" variant="contained" color="primary" fullWidth>

@@ -28,13 +28,15 @@ export const ProfileFormModal: React.FC<ProfileFormModalProps> = ({ open, onClos
     },
   });
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const { addUser } = useConnection()
+  const { addUser, setOpenToast, setToastMessage } = useConnection()
 
   const onSubmit: SubmitHandler<ProfileFormData> = (data) => {
     addUser(data)
     setProfileImage(null)
     reset();
-    onClose();
+    setToastMessage(`Usuário ${data.name} adicionado com sucesso!`);
+    onClose(); 
+    setOpenToast(true);
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

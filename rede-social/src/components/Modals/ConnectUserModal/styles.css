@@ -6,9 +6,16 @@
     width: 100%;
     gap: 10px;
 }
+
 .select {
     width: 100%;
 }
+
 .connect-button {
-    margin-top: 100px;
+    margin-top: 30px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
 }

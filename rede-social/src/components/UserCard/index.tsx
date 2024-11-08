@@ -4,13 +4,12 @@ import './styles.css'
 import { useConnection } from '../../context';
 
 export const UserCard = ({ user }: { user: UserType }) => {
-  const { deleteUser, graphState } = useConnection()
+  const { deleteUser } = useConnection()
 
-  console.log(graphState)
   return (
     <div className="user-card" key={user.id}>
       <div className="trash-icon">
-        <button onClick={() => deleteUser(user.id)}>
+        <button onClick={() => deleteUser(user.id, user.name)}>
           <DeleteIcon />
         </button>
       </div>

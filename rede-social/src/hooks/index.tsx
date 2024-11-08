@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react"
 import { graph } from "../mocks/connections"
-import { users, AddUserType, UserType } from "../mocks/users";
+import { users, AddUserType } from "../mocks/users";
 import { ConnectionContext } from "../context";
 
 
@@ -9,11 +9,12 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const [graphState, setGraphState] = useState(graph);
   const [filteredUsers, setFilteredUsers] = useState(users);
   const [searchedName, setSearchedName] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [openToast, setOpenToast] = useState(false);
 
   useEffect(() => {
     const newUsers = usersList.filter(user => user.name.includes(searchedName));
     setFilteredUsers(newUsers)
-    console.log(graphState)
   }, [searchedName])
 
   const addUser = (userData: AddUserType) => {
@@ -48,19 +49,21 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     }) 
   }
 
-  const deleteUser = (userId: number) => {
+  const deleteUser = (userId: number, userName: string) => {
     setUsersList(prev => [...prev.filter(item => item.id !== userId)])
     setFilteredUsers(prev => [...prev.filter(item => item.id !== userId)])
 
     removeUserFromGraph(userId)
+    setToastMessage(`Usuário ${userName} removido!`)
+    setOpenToast(true)
   }
 
-  const connectUsers = (user1:string, user2: string) => {
+  const connectUsers = (userId1: number, userId2: number) => {
     setGraphState(prevGraph => {
       const newGraph = { ...prevGraph };
 
-      const index1 = parseInt(user1);
-      const index2 = parseInt(user2);
+      const index1 = userId1;
+      const index2 = userId2;
       
       if (!newGraph[index1].includes(index2)) {
         newGraph[index1] = [...newGraph[index1], index2];
@@ -107,7 +110,11 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         usersList,
         filteredUsers,
         graphState,
-        setSearchedName
+        setSearchedName,
+        openToast,
+        setOpenToast,
+        toastMessage,
+        setToastMessage
       }}
     >
       {children}

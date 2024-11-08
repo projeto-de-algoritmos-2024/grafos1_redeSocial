@@ -6,11 +6,15 @@ interface ConnectionContextProps {
   usersList: UserType[];
   graphState: Graph;
   addUser: (userData: AddUserType) => void;
-  deleteUser: (userId: number) => void;
-  connectUsers: (user1: string, user2: string) => void;
+  deleteUser: (userId: number, userName: string) => void;
+  connectUsers: (user1: number, user2: number) => void;
   findConnectedUsers: (startUserId: number) => (UserType | undefined)[];
   setSearchedName: React.Dispatch<React.SetStateAction<string>>;
-  filteredUsers: UserType[]
+  filteredUsers: UserType[];
+  openToast: boolean;
+  setOpenToast: React.Dispatch<React.SetStateAction<boolean>>
+  toastMessage: string;
+  setToastMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const ConnectionContext = createContext<ConnectionContextProps>({} as ConnectionContextProps)
