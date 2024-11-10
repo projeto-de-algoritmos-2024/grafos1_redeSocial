@@ -1,8 +1,7 @@
 import { ReactNode, useEffect, useState } from "react"
-import { graph } from "../mocks/connections"
+import { graph, Graph } from "../mocks/connections"
 import { users, AddUserType } from "../mocks/users";
-import { ConnectionContext } from "../context";
-
+import { ConnectionContext, ID3Graph } from "../context";
 
 export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const [usersList, setUsersList] = useState(users);
@@ -98,8 +97,108 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     return Array.from(visited).map(id => usersList.find(user => user.id === id));
   };
 
-  
+  //DFS
+  function areUsersConnected(
+    user1: number,
+    user2: number,
+  ): boolean {
+    const visited = new Set<number>();
+    const stack = [user1];
 
+    while (stack.length > 0) {
+      const currentUser = stack.pop()!;
+      if (currentUser === user2) return true;
+      visited.add(currentUser);
+
+      (graphState[currentUser] || []).forEach((neighbor) => {
+        if (!visited.has(neighbor)) stack.push(neighbor);
+      });
+    }
+
+    return false;
+  }
+
+  //BFS
+  function suggestConnections(user: number, graph: Graph): number[] {
+    const firstDegree = new Set(graph[user] || []);
+    const suggestions = new Set<number>();
+  
+    firstDegree.forEach((friend) => {
+      (graph[friend] || []).forEach((friendOfFriend) => {
+        if (friendOfFriend !== user && !firstDegree.has(friendOfFriend)) {
+          suggestions.add(friendOfFriend);
+        }
+      });
+    });
+  
+    return Array.from(suggestions);
+  }
+
+  //DFS
+  function getFullNetwork(user: number): ID3Graph {
+    const visited = new Set<number>();
+    const stack = [user];
+
+    while (stack.length > 0) {
+      const currentUser = stack.pop()!;
+      if (!visited.has(currentUser)) {
+        visited.add(currentUser);
+        (graphState[currentUser] || []).forEach((neighbor) => {
+          if (!visited.has(neighbor)) stack.push(neighbor);
+        });
+      }
+    }
+
+    // Gerando os nodes e links no formato para react-d3-graph
+    const nodes = Array.from(visited).map((userId) => ({
+      id: userId.toString(),
+    }));
+
+    const links = Array.from(visited).flatMap((userId) =>
+      (graphState[userId] || [])
+        .filter((neighbor) => visited.has(neighbor) && userId < neighbor)
+        .map((neighbor) => ({
+          source: userId.toString(),
+          target: neighbor.toString(),
+        }))
+    );
+
+    return { nodes, links };
+  }
+
+  function getAllNodesNetwork() {
+    const visited = new Set<number>();
+    const stack = Object.keys(graphState).map(item => parseInt(item));
+
+    console.log(stack)
+
+    while (stack.length > 0) {
+      const currentUser = stack.pop()!;
+      if (!visited.has(currentUser)) {
+        visited.add(currentUser);
+        (graphState[currentUser] || []).forEach((neighbor) => {
+          if (!visited.has(neighbor)) stack.push(neighbor);
+        });
+      }
+    }
+
+    // Gerando os nodes e links no formato para react-d3-graph
+    const nodes = Array.from(visited).map((userId) => ({
+      id: userId.toString(),
+    }));
+
+    const links = Array.from(visited).flatMap((userId) =>
+      (graphState[userId] || [])
+        .filter((neighbor) => visited.has(neighbor) && userId < neighbor)
+        .map((neighbor) => ({
+          source: userId.toString(),
+          target: neighbor.toString(),
+        }))
+    );
+
+    return { nodes, links };
+  }
+  
   return (
     <ConnectionContext.Provider 
       value={{
@@ -114,7 +213,11 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         openToast,
         setOpenToast,
         toastMessage,
-        setToastMessage
+        setToastMessage,
+        areUsersConnected,
+        getFullNetwork,
+        suggestConnections,
+        getAllNodesNetwork
       }}
     >
       {children}

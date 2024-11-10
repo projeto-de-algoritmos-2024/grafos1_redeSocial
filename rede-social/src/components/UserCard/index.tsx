@@ -8,6 +8,9 @@ export const UserCard = ({ user }: { user: UserType }) => {
 
   return (
     <div className="user-card" key={user.id}>
+      <div>
+        {user.id}
+      </div>
       <div className="trash-icon">
         <button onClick={() => deleteUser(user.id, user.name)}>
           <DeleteIcon />

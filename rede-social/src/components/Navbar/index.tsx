@@ -2,6 +2,9 @@ import { ProfileFormModal } from '../Modals/ProfileFormModal';
 import { useNavBar } from './hooks/NavbarHook';
 import './styles.css';
 import { ConnectUserModal } from '../Modals/ConnectUserModal';
+import { Actions } from './components/Actions';
+import { VerifyConnectionModal } from '../Modals/VerifyConnectionModal';
+import { AllNetworkModal } from '../Modals/AllNetworkModal';
 
 export const Navbar = () => {
   const {
@@ -9,8 +12,31 @@ export const Navbar = () => {
     setOpenAddModal,
     setSearchedName,
     openConnectModal,
-    setOpenConnectModal
+    setOpenConnectModal,
+    openVerifyConnectionModal,
+    setVerifyConnectionModal,
+    openAllNetworkModal,
+    setOpenAllNetworkModal
   } = useNavBar();
+
+  const items = [
+    {
+      label: 'Adicionar usuário',
+      onClick: () => setOpenAddModal(true)
+    },
+    {
+      label: 'Conectar usuários',
+      onClick: () => setOpenConnectModal(true)
+    },
+    {
+      label: 'Rede completa',
+      onClick: () => setOpenAllNetworkModal(true)
+    },
+    {
+      label: 'Verificar conexão',
+      onClick: () => setVerifyConnectionModal(true)
+    }
+  ]
 
   return (
     <header className="header">
@@ -22,8 +48,7 @@ export const Navbar = () => {
         <input type="text" placeholder="Pesquisar usuário..." className="search-input" onChange={(e) => setSearchedName(e.target.value)}/>
       </div>
       <div className="action-buttons">
-        <button className="action-btn" onClick={() => setOpenAddModal(true)}>Adicionar Usuário</button>
-        <button className="action-btn" onClick={() => setOpenConnectModal(true)}>Conectar Usuários</button>
+        <Actions items={items} />
       </div>
       <ProfileFormModal
         open={openAddModal}
@@ -32,6 +57,14 @@ export const Navbar = () => {
       <ConnectUserModal
         open={openConnectModal}
         onClose={() => setOpenConnectModal(false)}
+      />
+      <VerifyConnectionModal 
+        open={openVerifyConnectionModal}
+        onClose={() => setVerifyConnectionModal(false)}
+      />
+      <AllNetworkModal 
+        open={openAllNetworkModal}
+        onClose={() => setOpenAllNetworkModal(false)}
       />
     </header>
   )

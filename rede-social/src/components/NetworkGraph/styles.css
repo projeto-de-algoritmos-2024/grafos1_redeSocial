@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 30px;
+}
+
+@media (max-width: 600px){
+  .container {
+    align-items: center;
+  }
+}
