@@ -17,7 +17,14 @@ Temas:
 Esse projeto visa aplicar os conceitos de grafos1 ministrados em sala de aula, foi utilizado algoritmos de busca em profundidade para simular uma rede de conexões em uma rede social. 
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+![Screenshot 1](/rede-social/public/WhatsApp%20Image%202024-11-11%20at%2022.47.10.jpeg)
+![Screenshot 2](/rede-social/public/WhatsApp%20Image%202024-11-11%20at%2022.47.09.jpeg)
+![Screenshot 3](/rede-social/public/WhatsApp%20Image%202024-11-11%20at%2022.47.09%20(3).jpeg)
+![Screenshot 4](/rede-social/public/WhatsApp%20Image%202024-11-11%20at%2022.47.09%20(2).jpeg)
+![Screenshot 5](/rede-social/public/WhatsApp%20Image%202024-11-11%20at%2022.47.09%20(1).jpeg)
+
+
+
 
 ## Instalação 
 **Linguagem**: Node Js com Typescript<br>
@@ -30,10 +37,4 @@ Para poder rodar o projeto é necessário seguir os seguintes passos:
 ### Clonar o repositório
 ### Instalar as dependências com o yarn install ou npm i
 ### Rodar o projeto com npm run dev 
-
-## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
-
-
-
 
