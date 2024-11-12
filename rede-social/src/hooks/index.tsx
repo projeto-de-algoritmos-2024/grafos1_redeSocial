@@ -170,8 +170,6 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     const visited = new Set<number>();
     const stack = Object.keys(graphState).map(item => parseInt(item));
 
-    console.log(stack)
-
     while (stack.length > 0) {
       const currentUser = stack.pop()!;
       if (!visited.has(currentUser)) {

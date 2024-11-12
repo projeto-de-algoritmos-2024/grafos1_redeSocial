@@ -12,13 +12,13 @@ export const AllNetworkModal = ({
   open,
   onClose
 }: AllNetworkModalProps) => {
-  const { graphState, filteredUsers, getAllNodesNetwork } = useConnection()
+  const { getAllNodesNetwork } = useConnection()
   const [data, setData] = useState<ID3Graph | undefined>(undefined)
 
   useEffect(() => {
     const network = getAllNodesNetwork()
     setData(network)
-  }, [graphState, filteredUsers.length])
+  }, [open])
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby="profile-form-modal">
